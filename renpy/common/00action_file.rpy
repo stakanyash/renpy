@@ -559,7 +559,7 @@ init -1500 python:
 
     def FileAction(name, page=None, **kwargs):
         """
-        :doc: file_action action
+        :doc: file_action
 
         "Does the right thing" with the file. This means loading it if the
         load screen is showing (current screen is named "load"), and saving
@@ -592,7 +592,7 @@ init -1500 python:
         if page is None:
             return
 
-        page = str(page)
+        page = unicode(page)
 
         for i in renpy.list_slots(__slotname(page, r'\d+')):
             renpy.predict(renpy.slot_screenshot(i))
@@ -655,7 +655,7 @@ init -1500 python:
         An input value that updates the name of a file page.
 
         `pattern`
-            This is used for the default name of a page. Python-style substitution
+            This is used for the default name of a page. Python-style substition
             is performed, such that {} is replaced with the number of the page.
 
         `auto`
@@ -672,11 +672,12 @@ init -1500 python:
             If true, this input can be editable by default.
         """
 
-        def __init__(self, pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"), page=None, default=False):
+        def __init__(self, pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"), checkpoint=_("Checkpoints"), page=None, default=False):
 
             self.pattern = pattern
             self.auto = auto
             self.quick = quick
+            self.checkpoint = checkpoint
 
             self._page = page
 
@@ -696,6 +697,8 @@ init -1500 python:
                 return False
             elif page == "quick":
                 return False
+            elif page == "checkpoint":
+                return False
 
             return True
 
@@ -706,6 +709,8 @@ init -1500 python:
                 return __(self.auto)
             elif page == "quick":
                 return __(self.quick)
+            elif page == "checkpoint":
+                return __(self.checkpoint)
             else:
 
                 page = int(page)
@@ -725,7 +730,7 @@ init -1500 python:
 
             page = self.get_page()
 
-            if page == "auto" or page =="quick":
+            if page in ("auto", "quick", "checkpoint"):
                 return
 
             default = __(self.pattern).format(page)
@@ -948,7 +953,7 @@ init -1500 python:
     @renpy.pure
     def QuickSave(message=_("Quick save complete."), newest=False):
         """
-        :doc: file_action action
+        :doc: file_action
 
         Performs a quick save.
 
@@ -957,7 +962,7 @@ init -1500 python:
 
         `newest`
             Set to true to mark the quicksave as the newest save.
-        """
+         """
 
         rv = [ FileSave(1, page="quick", confirm=False, cycle=True, newest=newest, action=Notify(message)) ]
 
@@ -971,7 +976,7 @@ init -1500 python:
     @renpy.pure
     def QuickLoad(confirm=True):
         """
-        :doc: file_action action
+        :doc: file_action
 
         Performs a quick load.
 
