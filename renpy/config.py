@@ -384,7 +384,7 @@ empty_window = None
 window_overlay_functions = []
 
 # Do we support right-to-left languages?
-rtl = False
+rtl = True
 
 # A callback for file opening.
 file_open_callback = None
@@ -514,7 +514,7 @@ save_dump = False
 # Can we resize a gl window?
 gl_resize = True
 
-# Called when we change the translation.
+# Removed.
 change_language_callbacks = []
 
 # The translation directory.
@@ -1574,6 +1574,22 @@ If not None, the time in seconds before the music is unloaded when downloaded as
 mesh_pad_compat: bool = False
 """
 Should mesh pad work the way it did before 8.4? (That is, it shifts things to the right/down by pad_left/pad_top.)
+"""
+
+emscripten_preload_timeout: float|None = 5.0
+"""
+After this many second without being able to preload, the emscripten port will cause a preload even if doing
+so might cause a framerate stutter.
+"""
+
+adjust_audio_amplitude: float = 1.0
+"""
+Adjusts the amplitude of all audio played back by multiplying it by this value.
+"""
+
+zoom_zaxis: bool = True
+"""
+If True, zooms will apply to the z-axis as well as the x and y axes.
 """
 
 del os

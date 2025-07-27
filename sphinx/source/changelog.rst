@@ -5,6 +5,71 @@ Changelog (Ren'Py 7.x-)
 *There is also a list of* :doc:`incompatible changes <incompatible>`
 
 
+.. _renpy-8.5.0:
+
+8.5.0
+=====
+
+Other Changes
+-------------
+
+The game.zip file produced by the web platform no longer contains .py files.
+
+
+.. _renpy-8.4.1:
+
+8.4.1
+=====
+
+Fixes
+-----
+
+Ren'Py will no longer report "Leaking texture: 0" warnings, which could be spurious in some cases.
+
+On the web platform, textures are reloaded when the browser window is resized, preventing the textures from appearing
+transparent or black.
+
+Playing a movie on the web platform no longer causes Ren'Py to produce a stream of warnings.
+
+The :func:`gui.SetPreference` action once again rebuilds the styles after the preference is set.
+
+The config.dissolve_shrinks option, which provides backwards compatibility for :class:`AlphaDissolve` transitions and
+:func:`AlphaBlend` displayables with mismatched child sizes, now works as intended.
+
+Copying translations between games now works correctly. This is especially important for transferring translations from
+the launcher to newly-created games, ensuring new non-English games are set up properly.
+
+Diagnostic print statements that could appear when playing movies on the web platform have been eliminated.
+
+The pixellate transition now functions as expected.
+
+Features
+--------
+
+Ren'Py now scans for templates in subdirectories of the projects directory.
+
+Ren'Py now supports Python's `importlib.resources <https://docs.python.org/3.12/library/importlib.resources.html>`_
+module. This provides a way to load the resources in a Python package, even if that Python package is stored in an RPA
+archive or an Android APK or asset pack.
+
+Other Changes
+-------------
+
+The lint check for when translation functions are called with the wrong number of arguments was too slow,
+to be included in lint, and so this check has been removed for the time being.
+
+Support for right-to-left languages is now enabled by default.
+
+When loading a Python module or package from disk, Ren'Py will now set the ``__file__`` attribute to the absolute
+path of the module or package. This reverts a change made in Ren'Py 8.4.0, which set the ``__file__`` attribute
+to the path relative to the game directory. When loading a module from an RPA archive or Android APK, this changes
+to a relative path starting with ``$game``. This change is meant to help more pure Python packages work with Ren'Py,
+but we recommend that you do not rely on the ``__file__`` attribute in your code, and use importlib.resources instead.
+
+It's now possible to :ref:`revert the audio volume drop <incompatible-8.4.1>` caused by the constant power
+panning change in Ren'Py 8.1. (This can also be worked around by adjusting mixer volumes.)
+
+
 .. _renpy-8.4.0:
 
 8.4.0
@@ -333,6 +398,8 @@ that the function is called from. The triple underscore function also marks the 
 inside for translation.
 
 The :var:`config.persistent_callback` callback makes it possible to update persistent data when it is loaded.
+Starting from this release :var:`persistent._version` will also be set to the current version of the game in
+any newly created persistent data. This can be used with the callback to migrate persistent save data.
 
 Changes
 -------
@@ -340,7 +407,7 @@ Changes
 The :func:`renpy.get_renderer_info` function now returns a dictionary containing information about user's
 GPU and graphics driver, when available.
 
-Lint now reports when the translation functuions (:func:`_`, :func:`__`, :func:`___`, and :func:`_p`) are called
+Lint now reports when the translation functions (:func:`_`, :func:`__`, :func:`___`, and :func:`_p`) are called
 with the wrong number of arguments.
 
 When Ren'Py loads a Python module from the game/ directory, ``__file__`` is set to the relative path of the module.
